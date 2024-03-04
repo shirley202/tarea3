@@ -37,12 +37,13 @@ const numberElement = document.getElementById("number");
     if (productId !== "0" && cantidad > 0) {
       const producto = productos[productId];
       const total = producto.precio * cantidad;
-      purchases.push({ price: producto.precio, number: cantidad });
+      purchases.push({ name: producto.nombre, price: producto.precio, quantity: cantidad });
       alert(`Producto: ${producto.nombre}\nCantidad: ${cantidad}\nImporte: ${total}`);
     } else {
       alert("Por favor, seleccione un producto y una cantidad válida.");
     }
   }
+  
   
   
   function display() {
@@ -68,10 +69,19 @@ function subtotal() {
 function calc() {
   const sum = subtotal();
   const postage = calcPostageFromPurchase(sum);
-  window.alert(`Subtotal: ${sum}\nGastos de envío: ${postage}\nTotal: ${sum + postage}`);
+
+  let content = `Subtotal: ${sum}\nGastos de envío: ${postage}\n\nProductos:\n`;
+  for (const purchase of purchases) {
+    content += `Nombre: ${purchase.name}\nCantidad: ${purchase.quantity}\nImporte: ${purchase.price * purchase.quantity}\n\n`;
+  }
+  content += `Total: ${sum + postage}`;
+
+  window.alert(content);
+
   purchases = [];
-  document.getElementById("number").value = ""; 
+  document.getElementById("number").value = "";
 }
+
 
 function calcPostageFromPurchase(sum) {
   if (sum == 0 || sum >= 3000) {
